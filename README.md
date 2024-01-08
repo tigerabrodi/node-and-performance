@@ -37,3 +37,22 @@ From the second post on Node.js performance optimization, here are the key pract
    - **What:** Excessive file system calls and directory traversal during module resolution.
    - **Why:** Resolving modules involved checking multiple directories and file extensions, resulting in a high number of file system calls.
    - **How:** Limit the number of directories and file extensions checked during module resolution and cache the results to prevent repeated checks.
+
+# Third post
+
+1. **Optimize Token Parsing in ESLint**
+
+   - **What:** Excessive instantiation of the `BackwardTokenCommentCursor` class in ESLint, occurring over 20 million times.
+   - **Why:** Frequent class instantiation and subsequent garbage collection were time-consuming.
+   - **How:** Optimize the parsing logic to reduce class instantiations and replace the linear search method with a more efficient algorithm like binary search to decrease parsing time.
+
+2. **Refactor Selector Engine Usage in ESLint**
+
+   - **What:** Inefficient usage of the selector engine, esquery, and outdated transpilation patterns in ESLint.
+   - **Why:** The use of the selector engine and transpiled for-of loops were not performance-optimized.
+   - **How:** Replace complex selectors with simpler JavaScript functions and update transpiled code to use modern JavaScript syntax, leading to significant performance gains.
+
+3. **Reduce AST Conversion Overhead for TypeScript**
+   - **What:** High overhead in converting TypeScript AST to ESLint's expected format.
+   - **Why:** Every TypeScript AST node had to be converted to ESLint's format, causing duplicate ASTs in memory and increasing processing time.
+   - **How:** Switch to a faster parser like `@babel/eslint-parser` for projects that don't require type-aware linting, reducing the time taken for AST conversion and configuration loading.
