@@ -56,3 +56,36 @@ From the second post on Node.js performance optimization, here are the key pract
    - **What:** High overhead in converting TypeScript AST to ESLint's expected format.
    - **Why:** Every TypeScript AST node had to be converted to ESLint's format, causing duplicate ASTs in memory and increasing processing time.
    - **How:** Switch to a faster parser like `@babel/eslint-parser` for projects that don't require type-aware linting, reducing the time taken for AST conversion and configuration loading.
+
+# Fourth post
+
+The fourth post focuses on optimizing the performance of the `npm run` command. Here are the key practical takeaways:
+
+1. **Lazy Load Modules in npm CLI**
+
+   - **What:** The npm CLI was loading modules that were unnecessary for the `npm run` command, causing delays.
+   - **Why:** Eager loading of modules, even when they are not required for the current operation, increases startup time.
+   - **How:** Implement lazy loading of modules, ensuring they are only loaded when needed. This includes error message formatting modules and others not directly related to running scripts.
+
+2. **Refactor Large Classes to Avoid Unnecessary Module Loading**
+
+   - **What:** The Arborist class in npm was loading many modules unnecessary for the `npm run` command.
+   - **Why:** Large classes that include multiple functionalities can lead to loading of unnecessary code.
+   - **How:** Refactor or bypass large classes like Arborist for specific commands like `npm run` to avoid loading irrelevant modules.
+
+3. **Optimize String Sorting Operations**
+
+   - **What:** Inefficient string sorting operations were identified in npm, such as those in the glob module and string locale compare functions.
+   - **Why:** Sorting operations, especially those involving locale comparison, can be expensive.
+   - **How:** Replace the `String.prototype.localeCompare` with `Intl.Collator` for faster string comparisons and avoid unnecessary sorting when possible.
+
+4. **Reduce Overall Module Graph**
+
+   - **What:** The npm command was burdened by a large module graph, leading to longer execution times.
+   - **Why:** Loading many interconnected modules increases the overall startup and execution time.
+   - **How:** Reduce the size of the module graph by removing or bypassing unnecessary dependencies, and consider bundling modules to reduce the overhead of loading multiple files.
+
+5. **Consider a Minimalist Approach for Specific Tasks**
+   - **What:** Creating a custom, minimalist script runner for npm scripts.
+   - **Why:** The npm CLI carries a lot of overhead not necessary for simply running scripts.
+   - **How:** Develop a lean script runner that does the bare minimum, significantly reducing execution time.
